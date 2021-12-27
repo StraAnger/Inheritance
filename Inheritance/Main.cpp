@@ -136,6 +136,7 @@ public:
 
 	void print()const
 	{
+		Human::print();
 		std::cout << speciality << " " << group << " " << rating << " " << attendance << std::endl;
 	}
 
