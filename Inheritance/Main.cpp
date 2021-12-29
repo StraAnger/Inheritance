@@ -142,6 +142,104 @@ public:
 
 };
 
+class Graduate : public Student
+{
+	std::string diplomaTheme;
+
+public:
+	const std::string& get_diplomaTheme()const
+	{
+		return diplomaTheme;
+	}
+
+	void set_diplomaTheme(const std::string& diplomaTheme)
+	{
+		this->diplomaTheme = diplomaTheme;
+	}
+
+	//Constructors
+
+	Graduate
+	(
+		const std::string last_name, const std::string first_name, unsigned int age,
+		const std::string& speciality, const std::string& group, double rating, double attendance,
+		const std::string& diplomaTheme
+
+	) :Student( last_name, first_name, age,speciality, group, rating, attendance)
+	{
+		set_diplomaTheme(diplomaTheme);
+		std::cout << "SConstructor:\t" << this << std::endl;
+
+	}
+
+	~Graduate()
+	{
+		std::cout << "SDestructor:\t" << this << std::endl;
+	}
+
+
+	void print()const
+	{
+		Student::print();
+		std::cout << diplomaTheme << std::endl;
+	}
+
+};
+
+
+class Teacher : public Human
+{
+	std::string speciality;
+	unsigned int experience;
+public:
+	const std::string& get_speciality()const
+	{
+		return speciality;
+	}
+
+	unsigned int get_experience()const
+	{
+		return experience;
+	}
+
+	void set_speciality(const std::string& speciality)
+	{
+		this->speciality = speciality;
+	}
+
+	void set_experience(unsigned int experience)
+	{
+		this->experience = experience;
+	}
+
+
+	//Constructors
+
+	Teacher
+	(
+		const std::string last_name, const std::string first_name, unsigned int age,
+		const std::string& speciality, unsigned int experience
+	) :Human(last_name, first_name, age)
+	{
+		set_speciality(speciality);
+		set_experience(experience);
+		std::cout << "SConstructor:\t" << this << std::endl;
+
+	}
+
+	~Teacher()
+	{
+		std::cout << "SDestructor:\t" << this << std::endl;
+	}
+
+
+	void print()const
+	{
+		Human::print();
+		std::cout << speciality << " " << experience<< std::endl;
+	}
+
+};
 
 
 int main()
@@ -151,6 +249,12 @@ int main()
 
 	Student stud("Pinkman", "Jessie", 25,"Chemistry", "WW_123", 85, 95);
 	stud.print();
+
+	Graduate grad("Skywalker", "Luke", 18, "Force in modern universe", "WW_123", 70, 99,"Could the Empire Strikes Back again?");
+	grad.print();
+
+	Teacher teach("Nukem", "Duke", 35, "Kick-asser", 100);
+	teach.print();
 
 
 	return 0;
