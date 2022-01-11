@@ -3,6 +3,9 @@
 #include<string>
 using namespace std;
 
+#define HUMAN_TAKE_PARAMETRS const std::string& last_name, const std::string& first_name, unsigned int age //принимаемые параметры конструктора Human
+#define HUMAN_GIVE_PARAMETRS last_name, first_name, age //передаваемые параметры конструктора Human
+
 class Human
 {
 	std::string last_name;
@@ -35,24 +38,27 @@ public:
 	}
 
 	//					Constructors:
-	Human(const std::string& last_name, const std::string& first_name, unsigned int age)
+	Human(HUMAN_TAKE_PARAMETRS)
 	{
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
 		cout << "HConstructor:\t" << this << endl;
 	}
-	~Human()
+	virtual ~Human()
 	{
 		cout << "HDestructor:\t" << this << endl;
 	}
 
 	//				Methods:
-	void print()const
+	virtual void print()const
 	{
-		cout << last_name << " " << first_name << " " << age << " лет" << endl;
+		cout << last_name << " " << first_name << " " << age << " y.o." << endl;
 	}
 };
+
+#define STUDENT_TAKE_PARAMETRS const std::string& speciality, const std::string& group, double rating, double attendance
+#define STUDENT_GIVE_PARAMETRS speciality, group, rating, attendance
 
 class Student :public Human
 {
@@ -97,9 +103,9 @@ public:
 	//					Constructors:
 	Student
 	(
-		const std::string& last_name, const std::string& first_name, unsigned int age,
-		const std::string& speciality, const std::string& group, double rating, double attendance
-	) :Human(last_name, first_name, age)
+		HUMAN_TAKE_PARAMETRS,
+		STUDENT_TAKE_PARAMETRS
+	) :Human(HUMAN_GIVE_PARAMETRS)
 	{
 		set_speciality(speciality);
 		set_group(group);
@@ -118,6 +124,10 @@ public:
 		cout << speciality << " " << group << " " << rating << " " << attendance << endl;
 	}
 };
+
+#define TEACHER_TAKE_PARAMETRS const const std::string& speciality, unsigned int experience
+#define TEACHER_GIVE_PARAMETRS speciality, experience
+
 
 class Teacher :public Human
 {
@@ -143,10 +153,10 @@ public:
 	//				Constructor
 	Teacher
 	(
-		const std::string& last_name, const std::string& first_name, unsigned int age,
-		const std::string& speciality, unsigned int experience
+		HUMAN_TAKE_PARAMETRS,
+		TEACHER_TAKE_PARAMETRS
 	)
-		:Human(last_name, first_name, age)
+		:Human(HUMAN_GIVE_PARAMETRS)
 	{
 		set_speciality(speciality);
 		set_experience(experience);
@@ -178,9 +188,9 @@ public:
 	}
 	//						Constructors:
 	Graduate(
-		const std::string& last_name, const std::string& first_name, unsigned int age,
-		const std::string& speciality, const std::string& group, double rating, double attendance,
-		const std::string& subject) :Student(last_name, first_name, age, speciality, group, rating, attendance)
+		HUMAN_TAKE_PARAMETRS,
+		STUDENT_TAKE_PARAMETRS,
+		const std::string& subject) :Student(HUMAN_GIVE_PARAMETRS, STUDENT_GIVE_PARAMETRS)
 	{
 		set_subject(subject);
 		cout << "GConstructor:\t" << this << endl;
@@ -198,8 +208,12 @@ public:
 };
 
 //Resharper
+
+//#define INHERITANCE_CHECK
+
 void main()
 {
+#ifdef INHERITANCE_CHECK
 	setlocale(LC_ALL, "");
 	Human human("Connor", "John", 18);
 	human.print();
@@ -212,4 +226,42 @@ void main()
 
 	Graduate grad("Shreder", "Hank", 40, "Cryminalistic", "WW_123", 90, 75, "How to catch Heizenberg");
 	grad.print();
+#endif // INHERITANCE_CHECK
+
+	//Generalization (up-cast)
+
+	Human* group[] =
+	{
+		new Student("Pinkman", "Jessie", 25, "Chemistry", "WW_123", 85, 95),
+		new Teacher("White", "Walter", 50, "Chemistry", 25),
+		new Graduate("Shreder", "Hank", 40, "Cryminalistic", "WW_123", 90, 75, "How to catch Heizenberg"),
+		new Student("Vercetti", "Tomas", 30, "City business", "Vice", 98, 99),
+		new Teacher("Diaz", "Ricardo", 55, "Weapons distribution", 30),
+		new Student("Montana", "Antonio", 30, "Cryminalistic", "Vice", 90, 80),
+
+	};
+
+
+	//оператор sizeof- возвращает размер в байтах выдаЄт
+
+	std::cout << sizeof(group) / sizeof(Human*) << std::endl;//¬ычисл€ем размер массива в элементах- делем размер массива в байтах на размер элекмента в байтах.
+
+	//Specialisation- уточнение ( Down-cast- приведение базового типа к дочернему)
+
+	for (int i = 0; i < sizeof(group)/sizeof(Human*); ++i) 
+	{
+		std::cout << "\n--------------------------------" << std::endl;
+		std::cout << typeid(*group[i]).name() << std::endl; //TRRI -Runtime Type Information
+		group[i]->print();
+		std::cout << "\n--------------------------------" << std::endl;
+	}
+
+////////////////////////////////////////////
+	for (int i = 0; i < sizeof(group) / sizeof(group[0]); ++i)
+	{
+
+		delete group[i];
+	}
+
+
 }
