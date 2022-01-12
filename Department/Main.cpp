@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #define HUMAN_TAKE_PARAMETRS const std::string& last_name, const std::string& first_name, unsigned int age //принимаемые параметры конструктора Human
 #define HUMAN_GIVE_PARAMETRS last_name, first_name, age //передаваемые параметры конструктора Human
@@ -192,6 +193,11 @@ public:
 
 int main()
 {
+
+	std::ofstream OutputFile;
+
+	OutputFile.open("employee_list.txt");
+
 	std::string str = "Hello";
 
 
@@ -218,10 +224,16 @@ int main()
 	std::cout << "Общая зарплата всего отдела: " << total_salary << std::endl;
 	std::cout << "\n-------------------------------------------\n";
 
+	OutputFile << "\n-------------------------------------------\n";
+	OutputFile << "Общая зарплата всего отдела: " << total_salary << std::endl;
+	OutputFile << "\n-------------------------------------------\n";
+
 	for (int i = 0; i < sizeof(department) / sizeof(Employee*); ++i)
 	{
 		delete department[i];
 	}
+
+	OutputFile.close();
 
 	return 0;
 }
