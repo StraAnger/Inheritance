@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+    <html lang="ru" data-n-head-ssr>
+        <head>
+        
+        
+        
+        
+        <script nonce="79083d3d-5634-4714-8381-8bd301de4ce6">window.__getPublicPath=function(){return "https://cdn2.ozone.ru/assets/";}</script>
+        <meta charset="utf-8">
+        <meta name="yandex-verification" content="2bccd09858554e85">
+        <meta name="google" content="notranslate">
+        <meta name="referrer" content="no-referrer-when-downgrade">
+        <meta name="yandex-tableau-widget" content="logo=/public/logo2019-y.png, color=#ffffff">
+        <meta nonce="79083d3d-5634-4714-8381-8bd301de4ce6" name="viewport" data-hid="viewport" content="width=device-width, height=device-height, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="/public/touch-icon-ipad-retina.png">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/public/touch-icon-ipad-retina.png">
+        <link rel="search" type="application/opensearchdescription+xml" title="Ozon" href="/public/searchprovider.xml">
+        <link rel="manifest" href="/public/manifest.json">
+        <link nonce="79083d3d-5634-4714-8381-8bd301de4ce6" rel="preconnect" href="https://cdn2.ozone.ru"><link nonce="79083d3d-5634-4714-8381-8bd301de4ce6" rel="preconnect" href="https://cdn1.ozone.ru">
+        
+    <link nonce="79083d3d-5634-4714-8381-8bd301de4ce6" internal rel="preload" as="font" href="//cdn1.ozone.ru/graphics/test/fonts/GT-Eesti-Pro-Display-Medium.woff" type="font/woff" crossorigin="anonymous">
+    <link nonce="79083d3d-5634-4714-8381-8bd301de4ce6" internal rel="preload" as="font" href="//cdn1.ozone.ru/graphics/test/fonts/GT-Eesti-Pro-Text-Book.woff" type="font/woff" crossorigin="anonymous">
+  
+  <style>
+  @font-face {
+    font-family: 'GTEestiPro';
+    font-weight: 700;
+    font-display: swap;
+    src: url('//cdn1.ozone.ru/graphics/test/fonts/GT-Eesti-Pro-Display-Medium.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'GTEestiPro';
+    font-weight: 400;
+    font-display: swap;
+    src: url('//cdn1.ozone.ru/graphics/test/fonts/GT-Eesti-Pro-Text-Book.woff') format('woff');
+  }
+  </style>
+ 

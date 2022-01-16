@@ -55,9 +55,17 @@ public:
 	}
 };
 
+std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return os << obj.get_last_name() << " " << obj.get_first_name() << " " << obj.get_age() << "y.o." << std::endl;
+}
+
+
 #define EMPLOYEE_TAKE_PARAMETRS  const std::string& position
 #define EMPLOYEE_GIVE_PARAMETRS  position
 
+
+//Абстрактный класс
 class Employee :public Human  //Наследование
 {
 	std::string position;
@@ -90,8 +98,16 @@ public:
 
 };
 
+std::ostream& operator<<(std::ostream& os, const Employee& obj)
+{
+	os << (Human)obj;
+	return os << obj.get_position();
+}
+
 #define PERMANENTEMPLOYEE_TAKE_PARAMETRS double salary 
 #define PERMANENTEMPLOYEE_GIVE_PARAMETRS salary 
+
+//Конкретный класс
 
 class PermanentEmployee :public Employee
 {
@@ -131,8 +147,15 @@ public:
 
 };
 
+std::ostream& operator<<(std::ostream& os, const PermanentEmployee& obj)
+{
+	return os << (Employee&)obj << " " << obj.get_salary();
+}
+
 #define HOURLYEMPLOYEE_TAKE_PARAMETRS double rate,int hours 
 #define HOURLYEMPLOYEE_GIVE_PARAMETRS rate,hours
+
+//Конкретный класс
 
 class HourlyEmployee :public Employee
 {
@@ -191,18 +214,20 @@ public:
 
 };
 
+
+std::ostream& operator<<(std::ostream& os, const HourlyEmployee& obj)
+{
+	return os << (Employee&)obj << " " << " rate: " << obj.get_rate() << " hours: " << obj.get_hours()<<" Total: "<<obj.get_salary();
+}
+
 int main()
 {
-
-	std::ofstream OutputFile;
-
-	OutputFile.open("employee_list.txt");
 
 	std::string str = "Hello";
 
 
 	setlocale(LC_ALL, "");
-
+	//Generalisation- обобщение (UpCast)
 	Employee* department[] =
 	{
 		new PermanentEmployee("Rosenberg","Ken",30,"Lawyer",2000),
@@ -216,7 +241,20 @@ int main()
 	for (int i = 0; i < sizeof(department) / sizeof(Employee*); ++i)
 	{
 		std::cout << "\n-------------------------------------------\n";
-		department[i]->print();
+		//department[i]->print();
+		std::cout << typeid(*department[i]).name() << std::endl;
+		//Specialization (DownCast)
+		if (typeid(*department[i]) == typeid(PermanentEmployee))
+		{
+			std::cout<<*dynamic_cast<PermanentEmployee*>(department[i])<<std::endl;
+		}
+
+		if (typeid(*department[i]) == typeid(HourlyEmployee))
+		{
+			std::cout << *dynamic_cast<HourlyEmployee*>(department[i]) << std::endl;
+		}
+
+		std::cout << *department[i] << std::endl;
 		total_salary += department[i]->get_salary();
 		
 	}
@@ -224,16 +262,13 @@ int main()
 	std::cout << "Общая зарплата всего отдела: " << total_salary << std::endl;
 	std::cout << "\n-------------------------------------------\n";
 
-	OutputFile << "\n-------------------------------------------\n";
-	OutputFile << "Общая зарплата всего отдела: " << total_salary << std::endl;
-	OutputFile << "\n-------------------------------------------\n";
-
+	
 	for (int i = 0; i < sizeof(department) / sizeof(Employee*); ++i)
 	{
 		delete department[i];
 	}
 
-	OutputFile.close();
+
 
 	return 0;
 }
