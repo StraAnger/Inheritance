@@ -62,9 +62,29 @@ public:
 		os << age << " y.o. ";
 		return os;
 	}
+
+	virtual std::ofstream& print(std::ofstream& os)const
+	{
+		//return os<< last_name << " " << first_name << " " << age << " y.o.";
+
+		os.width(10);
+		os << std::left;
+		os << last_name;
+		os.width(10);
+		os << first_name;
+		os.width(3);
+		os << age;
+		return os;
+	}
+
 };
 
 std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return obj.print(os);
+}
+
+std::ofstream& operator<<(std::ofstream& os, const Human& obj)
 {
 	return obj.print(os);
 }
@@ -98,24 +118,31 @@ public:
 	{
 		std::cout << "EDestructor:\t" << this << std::endl;
 	}
+
 	std::ostream& print(std::ostream& os)const
 	{
 		Human::print(os)<<" ";
-
 		os.width(10);
-		os << std::left;
+		return os << position;
+		
+	}
+
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Human::print(os) << " ";
+		os.width(10);
 		os << position;
 		return os;
-		
+
 	}
 
 };
 
-std::ostream& operator<<(std::ostream& os, const Employee& obj)
-{
-	os << (Human)obj;
-	return os << obj.get_position();
-}
+//std::ostream& operator<<(std::ostream& os, const Employee& obj)
+//{
+//	os << (Human)obj;
+//	return os << obj.get_position();
+//}
 
 #define PERMANENTEMPLOYEE_TAKE_PARAMETRS double salary 
 #define PERMANENTEMPLOYEE_GIVE_PARAMETRS salary 
@@ -154,19 +181,27 @@ public:
 		{
 			Employee::print(os) << " ";
 			os.width(10);
-			os << std::left;
-			os << salary;
-			return os;
+			os << std::right;
+			return os << salary;
 			
+		}
+
+		std::ofstream& print(std::ofstream& os)const
+		{
+			Employee::print(os) << " ";
+			os << std::right;
+			os.width(10);
+			 os<< salary;
+			 return os;
 		}
 
 
 };
 
-std::ostream& operator<<(std::ostream& os, const PermanentEmployee& obj)
-{
-	return os << (Employee&)obj << " " << obj.get_salary();
-}
+//std::ostream& operator<<(std::ostream& os, const PermanentEmployee& obj)
+//{
+//	return os << (Employee&)obj << " " << obj.get_salary();
+//}
 
 #define HOURLYEMPLOYEE_TAKE_PARAMETRS double rate,int hours 
 #define HOURLYEMPLOYEE_GIVE_PARAMETRS rate,hours
@@ -223,14 +258,27 @@ public:
 	std::ostream& print(std::ostream& os)const
 	{
 		Employee::print(os) << " ";
-			    
 		os.width(10);
-		os << std::left;
-		os <<" тариф " << rate;
+		os << "тариф: "; 
 		os.width(10);
-		os <<" отработано " << hours<<" часов. ";
+		os << std::right;
+		os << rate;
+		os << " отработано: ";
+		os.width(5);
+		os<< hours << " часов. ";
 		os.width(3);
 		os <<" Итого: "<< get_salary();
+		return os;
+	}
+
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Employee::print(os) << " ";
+		os.width(10);
+		os << std::right;
+		os << rate;
+		os.width(10);
+		os << hours;;
 		return os;
 	}
 
@@ -238,10 +286,10 @@ public:
 };
 
 
-std::ostream& operator<<(std::ostream& os, const HourlyEmployee& obj)
-{
-	return os << (Employee&)obj << " " << " rate: " << obj.get_rate() << " hours: " << obj.get_hours()<<" Total: "<<obj.get_salary();
-}
+//std::ostream& operator<<(std::ostream& os, const HourlyEmployee& obj)
+//{
+//	return os << (Employee&)obj << " " << " rate: " << obj.get_rate() << " hours: " << obj.get_hours()<<" Total: "<<obj.get_salary();
+//}
 
 int main()
 {
@@ -259,9 +307,9 @@ int main()
 
 	};
 
-	PermanentEmployee pe;
+	/*PermanentEmployee pe;
 	std::cout << "Введите информацию о сотруднике: ";
-	std::cin >> pe;
+	std::cin >> pe;*/
 
 
 	double total_salary = 0;
@@ -294,7 +342,8 @@ int main()
 	{
 		fout.width(30);
 		fout << std::left;
-		fout <<std::string(typeid(*department[i]).name())+ ":" << *department[i] << std::endl;
+		fout << std::string(typeid(*department[i]).name()) + ":"; 
+		fout<<*department[i] << std::endl;
 	}
 	fout.close();
 	system("start notepad file.txt");
