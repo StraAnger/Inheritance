@@ -49,15 +49,24 @@ public:
 	}
 
 	//				Methods:
-	virtual void print()const
+	virtual std::ostream& print(std::ostream& os)const
 	{
-		std::cout << last_name << " " << first_name << " " << age << " y.o." << std::endl;
+		//return os<< last_name << " " << first_name << " " << age << " y.o.";
+
+		os.width(10);
+		os << std::left;
+		os << last_name;
+		os.width(10);
+		os << first_name;
+		os.width(3);
+		os << age << " y.o. ";
+		return os;
 	}
 };
 
 std::ostream& operator<<(std::ostream& os, const Human& obj)
 {
-	return os << obj.get_last_name() << " " << obj.get_first_name() << " " << obj.get_age() << "y.o." << std::endl;
+	return obj.print(os);
 }
 
 
@@ -89,11 +98,15 @@ public:
 	{
 		std::cout << "EDestructor:\t" << this << std::endl;
 	}
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Human::print();
-		std::cout << position;
-		std::cout << std::endl;
+		Human::print(os)<<" ";
+
+		os.width(10);
+		os << std::left;
+		os << position;
+		return os;
+		
 	}
 
 };
@@ -137,11 +150,14 @@ public:
 			std::cout << "PEDestructor:\t" << this << std::endl;
 		}
 
-		void print()const
+		std::ostream& print(std::ostream& os)const
 		{
-			Employee::print();
-			std::cout << salary;
-			std::cout << std::endl;
+			Employee::print(os) << " ";
+			os.width(10);
+			os << std::left;
+			os << salary;
+			return os;
+			
 		}
 
 
@@ -204,11 +220,18 @@ public:
 		std::cout << "HEDestructor:\t" << this << std::endl;
 	}
 
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Employee::print();
-		std::cout <<"тариф "<< rate<<", отработано "<<hours<<" часов."<<" Итого:"<<get_salary();
-	    std::cout << std::endl;
+		Employee::print(os) << " ";
+			    
+		os.width(10);
+		os << std::left;
+		os <<" тариф " << rate;
+		os.width(10);
+		os <<" отработано " << hours<<" часов. ";
+		os.width(3);
+		os <<" Итого: "<< get_salary();
+		return os;
 	}
 
 
@@ -242,17 +265,17 @@ int main()
 	{
 		std::cout << "\n-------------------------------------------\n";
 		//department[i]->print();
-		std::cout << typeid(*department[i]).name() << std::endl;
+		//std::cout << typeid(*department[i]).name() << std::endl;
 		//Specialization (DownCast)
-		if (typeid(*department[i]) == typeid(PermanentEmployee))
-		{
-			std::cout<<*dynamic_cast<PermanentEmployee*>(department[i])<<std::endl;
-		}
+		//if (typeid(*department[i]) == typeid(PermanentEmployee))
+		//{
+		//	std::cout<<*dynamic_cast<PermanentEmployee*>(department[i])<<std::endl;
+		//}
 
-		if (typeid(*department[i]) == typeid(HourlyEmployee))
-		{
-			std::cout << *dynamic_cast<HourlyEmployee*>(department[i]) << std::endl;
-		}
+		//if (typeid(*department[i]) == typeid(HourlyEmployee))
+		//{
+		//	std::cout << *dynamic_cast<HourlyEmployee*>(department[i]) << std::endl;
+		//}
 
 		std::cout << *department[i] << std::endl;
 		total_salary += department[i]->get_salary();
@@ -262,7 +285,17 @@ int main()
 	std::cout << "Общая зарплата всего отдела: " << total_salary << std::endl;
 	std::cout << "\n-------------------------------------------\n";
 
-	
+	std::ofstream fout("file.txt");
+	for (int i = 0; i < sizeof(department) / sizeof(Employee*); ++i)
+	{
+		fout.width(30);
+		fout << std::left;
+		fout <<std::string(typeid(*department[i]).name())+ ":" << *department[i] << std::endl;
+	}
+	fout.close();
+	system("start notepad file.txt");
+
+
 	for (int i = 0; i < sizeof(department) / sizeof(Employee*); ++i)
 	{
 		delete department[i];
