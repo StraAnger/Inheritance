@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Department", "Department\De
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Files", "Files\Files.vcxproj", "{652E5D50-4571-4D13-9D40-408CC7CEFA30}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct3D_test1_Geometry_OOP", "..\..\..\..\..\Projects\Direct3D_test1_Geometry_OOP\Direct3D_test1_Geometry_OOP\Direct3D_test1_Geometry_OOP.vcxproj", "{152F8D60-DD62-46B5-BDAA-03738486A156}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{652E5D50-4571-4D13-9D40-408CC7CEFA30}.Release|x64.Build.0 = Release|x64
 		{652E5D50-4571-4D13-9D40-408CC7CEFA30}.Release|x86.ActiveCfg = Release|Win32
 		{652E5D50-4571-4D13-9D40-408CC7CEFA30}.Release|x86.Build.0 = Release|Win32
+		{152F8D60-DD62-46B5-BDAA-03738486A156}.Debug|x64.ActiveCfg = Debug|x64
+		{152F8D60-DD62-46B5-BDAA-03738486A156}.Debug|x64.Build.0 = Debug|x64
+		{152F8D60-DD62-46B5-BDAA-03738486A156}.Debug|x86.ActiveCfg = Debug|Win32
+		{152F8D60-DD62-46B5-BDAA-03738486A156}.Debug|x86.Build.0 = Debug|Win32
+		{152F8D60-DD62-46B5-BDAA-03738486A156}.Release|x64.ActiveCfg = Release|x64
+		{152F8D60-DD62-46B5-BDAA-03738486A156}.Release|x64.Build.0 = Release|x64
+		{152F8D60-DD62-46B5-BDAA-03738486A156}.Release|x86.ActiveCfg = Release|Win32
+		{152F8D60-DD62-46B5-BDAA-03738486A156}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

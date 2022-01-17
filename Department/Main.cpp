@@ -259,6 +259,10 @@ int main()
 
 	};
 
+	PermanentEmployee pe;
+	std::cout << "¬ведите информацию о сотруднике: ";
+	std::cin >> pe;
+
 
 	double total_salary = 0;
 	for (int i = 0; i < sizeof(department) / sizeof(Employee*); ++i)
