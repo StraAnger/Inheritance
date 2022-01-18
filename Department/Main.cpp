@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #define HUMAN_TAKE_PARAMETRS const std::string& last_name, const std::string& first_name, unsigned int age //принимаемые параметры конструктора Human
 #define HUMAN_GIVE_PARAMETRS last_name, first_name, age //передаваемые параметры конструктора Human
@@ -77,6 +78,12 @@ public:
 		return os;
 	}
 
+	virtual std::ifstream& scan(std::ifstream& is)
+	{
+		is >> last_name >> first_name >> age;
+		return is;
+	}
+
 };
 
 std::ostream& operator<<(std::ostream& os, const Human& obj)
@@ -88,6 +95,13 @@ std::ofstream& operator<<(std::ofstream& os, const Human& obj)
 {
 	return obj.print(os);
 }
+
+std::ifstream& operator>>(std::ifstream& is, Human& obj)
+{
+	return obj.scan(is);
+}
+
+
 
 
 #define EMPLOYEE_TAKE_PARAMETRS  const std::string& position
@@ -134,6 +148,13 @@ public:
 		os << position;
 		return os;
 
+	}
+
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Human::scan(is);
+		is >> position;
+		return is;
 	}
 
 };
@@ -195,6 +216,12 @@ public:
 			 return os;
 		}
 
+		std::ifstream& scan(std::ifstream& is)
+		{
+			Employee::scan(is);
+			is >> salary;
+			return is;
+		}
 
 };
 
@@ -282,6 +309,13 @@ public:
 		return os;
 	}
 
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Employee::scan(is);
+		is >> rate>>hours;
+		return is;
+	}
+
 
 };
 
@@ -291,15 +325,26 @@ public:
 //	return os << (Employee&)obj << " " << " rate: " << obj.get_rate() << " hours: " << obj.get_hours()<<" Total: "<<obj.get_salary();
 //}
 
+
+Employee* EmployeeFactory(const std::string& type)
+{
+	if (type.find("PermanentEmployee")!=std::string::npos) return new PermanentEmployee("","",0,"",0);
+	if (type.find("HourlyEmployee") != std::string::npos) return new HourlyEmployee("","",0,"",0,0);
+}
+
+//#define SAVE_TO_FILE
+
+
+
 int main()
 {
-
+#ifdef SAVE_TO_FILE
 	std::string str = "Hello";
 
 
 	setlocale(LC_ALL, "");
-	//Generalisation- обобщение (UpCast)
-	Employee* department[] =
+	Generalisation - обобщение(UpCast)
+		Employee * department[] =
 	{
 		new PermanentEmployee("Rosenberg","Ken",30,"Lawyer",2000),
 		new PermanentEmployee("Diaz","Ricardo",50,"Boss",50000),
@@ -316,22 +361,22 @@ int main()
 	for (int i = 0; i < sizeof(department) / sizeof(Employee*); ++i)
 	{
 		std::cout << "\n-------------------------------------------\n";
-		//department[i]->print();
-		//std::cout << typeid(*department[i]).name() << std::endl;
-		//Specialization (DownCast)
-		//if (typeid(*department[i]) == typeid(PermanentEmployee))
-		//{
-		//	std::cout<<*dynamic_cast<PermanentEmployee*>(department[i])<<std::endl;
-		//}
+		department[i]->print();
+		std::cout << typeid(*department[i]).name() << std::endl;
+		Specialization(DownCast)
+			if (typeid(*department[i]) == typeid(PermanentEmployee))
+			{
+				std::cout << *dynamic_cast<PermanentEmployee*>(department[i]) << std::endl;
+			}
 
-		//if (typeid(*department[i]) == typeid(HourlyEmployee))
-		//{
-		//	std::cout << *dynamic_cast<HourlyEmployee*>(department[i]) << std::endl;
-		//}
+		if (typeid(*department[i]) == typeid(HourlyEmployee))
+		{
+			std::cout << *dynamic_cast<HourlyEmployee*>(department[i]) << std::endl;
+		}
 
 		std::cout << *department[i] << std::endl;
 		total_salary += department[i]->get_salary();
-		
+
 	}
 	std::cout << "\n-------------------------------------------\n";
 	std::cout << "Общая зарплата всего отдела: " << total_salary << std::endl;
@@ -342,8 +387,8 @@ int main()
 	{
 		fout.width(30);
 		fout << std::left;
-		fout << std::string(typeid(*department[i]).name()) + ":"; 
-		fout<<*department[i] << std::endl;
+		fout << std::string(typeid(*department[i]).name()) + ":";
+		fout << *department[i] << std::endl;
 	}
 	fout.close();
 	system("start notepad file.txt");
@@ -353,8 +398,65 @@ int main()
 	{
 		delete department[i];
 	}
+#endif // SAVE_TO_FILE
+
+	setlocale(LC_ALL, "");
+
+	int n = 0;   //Размер массива
+	Employee** department = nullptr;
 
 
+	std::ifstream fin("file.txt");
+	if (fin.is_open())
+	{
+		std::cout << fin.tellg() << std::endl; //позиция курсора
+		//1)Определяем количество записей в файле для того, чтобы выделить память под сотрудников
+		std::string employee_type;
+		
+		for (; !fin.eof(); ++n)
+		{
+			getline(fin, employee_type);
+
+		}
+		--n;
+		std::cout << n<<std::endl;
+		//2) выделяем память под массив
+
+		department = new Employee * [n] {};
+
+		//3)Возвращаем курсор в начало файла
+		std::cout << fin.tellg() << std::endl;
+		fin.clear();//очищаем поток
+		fin.seekg(0);//задаём расположение курсора
+		std::cout << fin.tellg() << std::endl;
+		//нужно перечитать файл и сохранить каждую строку в своём объекте
+		//4) Загружаем данные из файла в массив:
+		
+		for (int i = 0; i < n; ++i)
+		{
+			getline(fin, employee_type, ':');
+			department[i] = EmployeeFactory(employee_type);
+			fin >> *department[i];
+		}
+
+	}
+	else
+	{
+		std::cerr << "Error: file not found" << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		std::cout << *department[i] << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		delete department[i];
+	}
+
+	delete[] department;
+	fin.close();
 
 	return 0;
 }
