@@ -1,6 +1,7 @@
 //Academy
 #include<iostream>
 #include<string>
+#include <fstream>
 using namespace std;
 
 #define HUMAN_TAKE_PARAMETRS const std::string& last_name, const std::string& first_name, unsigned int age //принимаемые параметры конструктора Human
@@ -51,11 +52,58 @@ public:
 	}
 
 	//				Methods:
-	virtual void print()const
+
+	virtual std::ostream& print(std::ostream& os)const
 	{
-		cout << last_name << " " << first_name << " " << age << " y.o." << endl;
+		//return os<< last_name << " " << first_name << " " << age << " y.o.";
+
+		os.width(10);
+		os << std::left;
+		os << last_name;
+		os.width(10);
+		os << first_name;
+		os.width(3);
+		os << age << " y.o. ";
+		return os;
 	}
+
+	virtual std::ofstream& print(std::ofstream& os)const
+	{
+		//return os<< last_name << " " << first_name << " " << age << " y.o.";
+
+		os.width(10);
+		os << std::left;
+		os << last_name;
+		os.width(10);
+		os << first_name;
+		os.width(3);
+		os << age;
+		return os;
+	}
+
+	virtual std::ifstream& scan(std::ifstream& is)
+	{
+		is >> last_name >> first_name >> age;
+		return is;
+	}
+
 };
+
+std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return obj.print(os);
+}
+
+std::ofstream& operator<<(std::ofstream& os, const Human& obj)
+{
+	return obj.print(os);
+}
+
+std::ifstream& operator>>(std::ifstream& is, Human& obj)
+{
+	return obj.scan(is);
+}
+
 
 #define STUDENT_TAKE_PARAMETRS const std::string& speciality, const std::string& group, double rating, double attendance
 #define STUDENT_GIVE_PARAMETRS speciality, group, rating, attendance
@@ -118,11 +166,46 @@ public:
 		cout << "SDestructor:\t" << this << endl;
 	}
 
-	void print()const
+
+	std::ostream& print(std::ostream& os)const
 	{
-		Human::print();
-		cout << speciality << " " << group << " " << rating << " " << attendance << endl;
+		Human::print(os) << " ";
+		os.width(20);
+		os << std::left;
+		os << speciality;
+		os.width(15);
+		os << group;
+		os.width(15);
+		os << rating;
+		os.width(15);
+		os << attendance;
+		return os;
+
 	}
+
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Human::print(os) << " ";
+		os.width(20);
+		os << std::left;
+		os << speciality;
+		os.width(15);
+		os << group;
+		os.width(15);
+		os << rating;
+		os.width(15);
+		os << attendance;
+		return os;
+
+	}
+
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Human::scan(is);
+		is >> speciality>>group>>rating>>attendance;
+		return is;
+	}
+
 };
 
 #define TEACHER_TAKE_PARAMETRS const const std::string& speciality, unsigned int experience
@@ -167,10 +250,35 @@ public:
 		cout << "TDestructor:\t" << this << endl;
 	}
 	//					Methods
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Human::print();
-		cout << speciality << " " << experience << endl;
+		Human::print(os) << " ";
+		os.width(35);
+		os << std::left;
+		os << speciality;
+		os.width(35);
+		os << experience;
+		return os;
+
+	}
+
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Human::print(os) << " ";
+		os.width(35);
+		os << std::left;
+		os << speciality;
+		os.width(35);
+		os << experience;
+		return os;
+
+	}
+
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Human::scan(is);
+		is >> speciality >> experience;
+		return is;
 	}
 };
 
@@ -200,16 +308,46 @@ public:
 		cout << "GDestructor:\t" << this << endl;
 	}
 	//						Methods:
-	void print()const
+		std::ostream& print(std::ostream& os)const
 	{
-		Student::print();
-		cout << subject << endl;
+		Student::print(os) << " ";
+		os.width(10);
+		os << std::left;
+		os << subject;
+		return os;
+
+	}
+
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Student::print(os) << " ";
+		os.width(10);
+		os << std::left;
+		os << subject;
+		return os;
+
+	}
+
+	std::ifstream& scan(std::ifstream& is)
+	{
+		Student::scan(is);
+		is >> subject;
+		return is;
 	}
 };
+
+Human* StudentFactory(const std::string& type)
+{
+	if (type.find("Student") != std::string::npos) return new Student("", "", 0,"","",0,0);
+	if (type.find("Teacher") != std::string::npos) return new Teacher("", "", 0, "", 0);
+	if (type.find("Graduate") != std::string::npos) return new Graduate("", "", 0, "", "", 0, 0,"");
+}
 
 //Resharper
 
 //#define INHERITANCE_CHECK
+//#define FILE_OUTPUT_CHECK
+#define FILE_INPUT_CHECK
 
 void main()
 {
@@ -227,6 +365,7 @@ void main()
 	Graduate grad("Shreder", "Hank", 40, "Cryminalistic", "WW_123", 90, 75, "How to catch Heizenberg");
 	grad.print();
 #endif // INHERITANCE_CHECK
+#ifdef FILE_OUTPUT_CHECK
 
 	//Generalization (up-cast)
 
@@ -248,20 +387,97 @@ void main()
 
 	//Specialisation- уточнение ( Down-cast- приведение базового типа к дочернему)
 
-	for (int i = 0; i < sizeof(group)/sizeof(Human*); ++i) 
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); ++i)
 	{
 		std::cout << "\n--------------------------------" << std::endl;
 		std::cout << typeid(*group[i]).name() << std::endl; //TRRI -Runtime Type Information
-		group[i]->print();
+	//	group[i]->print();
+		std::cout << *group[i] << std::endl;
 		std::cout << "\n--------------------------------" << std::endl;
 	}
 
-////////////////////////////////////////////
+	////////////////////////////////////////////
+
+
+	std::ofstream fout("file.txt");
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); ++i)
+	{
+		fout.width(30);
+		fout << std::left;
+		fout << std::string(typeid(*group[i]).name()) + ":";
+		fout << *group[i] << std::endl;
+	}
+	fout.close();
+	system("start notepad file.txt");
+
+
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); ++i)
 	{
 
 		delete group[i];
 	}
+#endif // FILE_OUTPUT_CHECK
+
+#ifdef FILE_INPUT_CHECK
+
+	int n = 0;
+	Human** group = nullptr;
+
+
+	std::ifstream fin("file.txt");
+	if (fin.is_open())
+	{
+		std::cout << fin.tellg() << std::endl; //позиция курсора
+		//1)Определяем количество записей в файле для того, чтобы выделить память под студентов
+		std::string student_type;
+
+		for (; !fin.eof(); ++n)
+		{
+			getline(fin, student_type);
+
+		}
+		--n;
+		std::cout << n << std::endl;
+		//2) выделяем память под массив
+
+		group = new Human * [n] {};
+
+		//3)Возвращаем курсор в начало файла
+		std::cout << fin.tellg() << std::endl;
+		fin.clear();//очищаем поток
+		fin.seekg(0);//задаём расположение курсора
+		std::cout << fin.tellg() << std::endl;
+		//нужно перечитать файл и сохранить каждую строку в своём объекте
+		//4) Загружаем данные из файла в массив:
+
+		for (int i = 0; i < n; ++i)
+		{
+			getline(fin, student_type, ':');
+			group[i] = StudentFactory(student_type);
+			fin >> *group[i];
+		}
+
+	}
+	else
+	{
+		std::cerr << "Error: file not found" << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		std::cout << *group[i] << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		delete group[i];
+	}
+
+	delete[] group;
+	fin.close();
+#endif // FILE_INPUT_CHECK
+
+
 
 
 }
